@@ -1,0 +1,168 @@
+{
+	"info": {
+		"_postman_id": "c342c3b5-7e60-4852-b84f-7d85c38aea59",
+		"name": "GreenJinnTestTask",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Ticker values for a currency pair",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"const json_data = pm.response.json();",
+							"",
+							"pm.test(\"Response has all expected keys\", function () {",
+							"    const expectedKeys = [\"timestamp\", \"open\", \"high\", \"low\", \"last\", \"volume\", \"vwap\", \"bid\", \"ask\", \"side\", \"open_24\", \"percent_change_24\"];",
+							"    expectedKeys.forEach(key => {",
+							"        pm.expect(json_data).to.have.property(key);",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/ticker-values/btcusd",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"ticker-values",
+						"btcusd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Trading pairs info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"const json_data = pm.response.json();",
+							"",
+							"pm.test(\"Response is an array and is not empty\", function () {",
+							"    pm.expect(json_data).to.be.an(\"array\");",
+							"    pm.expect(json_data.length).to.be.above(0);",
+							"});",
+							"",
+							"json_data.forEach((item, index) => {",
+							"    pm.test(`Item ${index + 1} has correct keys`, function () {",
+							"        pm.expect(item).to.have.property(\"name\");",
+							"        pm.expect(item).to.have.property(\"symbol\");",
+							"        pm.expect(item).to.have.property(\"description\");",
+							"    });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/trading-pairs-info",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"trading-pairs-info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Average Bitcoin price",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"const json_data = pm.response.json();",
+							"",
+							"pm.test(\"Response has correct top-level fields\", function () {",
+							"    pm.expect(json_data).to.have.property(\"ticker\");",
+							"    pm.expect(json_data).to.have.property(\"average_price\");",
+							"    pm.expect(json_data).to.have.property(\"providers\");",
+							"});",
+							"",
+							"pm.test(\"Providers is an array and is not empty\", function () {",
+							"    pm.expect(json_data.providers).to.be.an(\"array\");",
+							"    pm.expect(json_data.providers.length).to.be.above(0); ",
+							"});",
+							"",
+							"json_data.providers.forEach((provider, index) => {",
+							"    pm.test(`Provider ${index + 1} has correct fields`, function () {",
+							"        pm.expect(provider).to.have.property(\"provider\");",
+							"        pm.expect(provider).to.have.property(\"price\");",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"Average price is correctly calculated\", function () {",
+							"    const provider_prices = json_data.providers.map(provider => provider.price);",
+							"    const sum = provider_prices.reduce((a, b) => a + b, 0);",
+							"    const average = sum / provider_prices.length;",
+							"",
+							"    pm.expect(json_data.average_price).to.be.closeTo(average, 0.01);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/average-bitcoin-price",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"average-bitcoin-price"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
