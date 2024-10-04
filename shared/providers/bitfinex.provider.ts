@@ -1,11 +1,11 @@
-import { IProviderResponse } from "./interfaces/provider-response.interface";
+import { IProviderResponse } from './interfaces/provider-response.interface';
 
 export class BitfinexDataProvider {
-  private static base_url = "https://api-pub.bitfinex.com/v2";
+  private static base_url = 'https://api-pub.bitfinex.com/v2';
 
   static async getBitcoinPrice(): Promise<IProviderResponse> {
     const response = await fetch(
-      `${BitfinexDataProvider.base_url}/tickers?symbols=tBTCUSD`
+      `${BitfinexDataProvider.base_url}/tickers?symbols=tBTCUSD`,
     );
 
     if (!response.ok) {
@@ -15,7 +15,7 @@ export class BitfinexDataProvider {
     const data = await response.json();
 
     return {
-      provider: "Bitfinex",
+      provider: 'Bitfinex',
       price: parseFloat(data[0][1]),
     };
   }

@@ -1,11 +1,11 @@
-import { IProviderResponse } from "./interfaces/provider-response.interface";
+import { IProviderResponse } from './interfaces/provider-response.interface';
 
 export class BitstampDataProvider {
-  private static base_url = "https://www.bitstamp.net/api/v2";
+  private static base_url = 'https://www.bitstamp.net/api/v2';
 
   static async getBitcoinPrice(): Promise<IProviderResponse> {
     const response = await fetch(
-      `${BitstampDataProvider.base_url}/ticker/btcusd`
+      `${BitstampDataProvider.base_url}/ticker/btcusd`,
     );
 
     if (!response.ok) {
@@ -15,14 +15,14 @@ export class BitstampDataProvider {
     const data = await response.json();
 
     return {
-      provider: "Bitstamp",
+      provider: 'Bitstamp',
       price: parseFloat(data.last),
     };
   }
 
   static async getTradingPairsInfo() {
     const response = await fetch(
-      `${BitstampDataProvider.base_url}/trading-pairs-info`
+      `${BitstampDataProvider.base_url}/trading-pairs-info`,
     );
 
     if (!response.ok) {
@@ -42,7 +42,7 @@ export class BitstampDataProvider {
 
   static async getTickerValues(currency_pair: string) {
     const response = await fetch(
-      `${BitstampDataProvider.base_url}/ticker/${currency_pair}`
+      `${BitstampDataProvider.base_url}/ticker/${currency_pair}`,
     );
 
     if (!response.ok) {
